@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:11:40 by luciama2          #+#    #+#             */
-/*   Updated: 2025/03/28 14:53:52 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:57:42 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ int main(void)
 	std::cout << std::endl;
 	iter<float>(b, static_cast<size_t>(sizeof(b) / sizeof(b[0])), print_element_red<float>);
 	std::cout << std::endl;
+	
 	return (0);
 }
