@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:11:44 by luciama2          #+#    #+#             */
-/*   Updated: 2025/03/28 14:53:36 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/03/31 19:49:56 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include <iostream>
 # include "Colors.hpp"
 
-template<typename T>
-void	iter(T const a[], size_t const &len, void (f)(const T &))
+template<typename T, typename F>
+void	iter(T a[], size_t const &len, F f)
 {
 	for (size_t i = 0; i < len; i++)
 	{
