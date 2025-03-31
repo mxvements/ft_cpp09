@@ -1,4 +1,4 @@
-NAME=	exchange
+NAME=	btc
 CC=		c++
 FLAGS=	-Wall -Wextra -Werror -std=c++98 -g3
 
