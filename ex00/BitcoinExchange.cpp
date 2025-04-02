@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:19:00 by luciama2          #+#    #+#             */
-/*   Updated: 2025/04/01 20:23:40 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/02 20:22:14 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ double BitcoinExchange::convert_double(std::string input)
 {
 	char *end_ptr;
 	std::string end_str;
-	double result = std::strtod(input.c_str(), &end_ptr);
+	errno = 0;
+	long double result = std::strtold(input.c_str(), &end_ptr);
 	end_str = end_ptr;
 	if (end_str.length() > 0 || errno)
 		return (-1);
@@ -41,6 +42,7 @@ void BitcoinExchange::loadDB(void)
 		std::string value = line.substr(line.find_first_of(',') + 1, line.size());
 		time_t d = this->convert<time_t>(date, DB_DATE);
 		float v = this->convert<float>(value, DB_VALUE);
+		std::cout <<  "pair : " << std::pair<time_t, float>(d, v).first <<"-"<< std::pair<time_t, float>(d, v).second << std::endl;
 		this->_db.insert(std::pair<time_t, float>(d, v));
 	}
 	dbFile.close();
@@ -91,7 +93,9 @@ const char *BitcoinExchange::BadHeaderException::what() const throw()
 void BitcoinExchange::print(void) const
 {
 	for (std::map<time_t, float>::const_iterator it = this->_db.begin(); it != this->_db.end(); it++)
+	{
 		std::cout << "[ " << it->first << " : " << it->second << " ]" << std::endl;
+	}
 }
 
 void BitcoinExchange::loadInput(std::string input)
