@@ -2,7 +2,7 @@ NAME=	array
 CC=		c++
 FLAGS=	-Wall -Wextra -Werror -std=c++98 -g3
 
-SRC= 	main.cpp BitcoinExchange.cpp
+SRC= 	main.cpp
 OBJ_P=	./obj/
 OBJ=	$(SRC:%.cpp=$(OBJ_P)%.o)
 
