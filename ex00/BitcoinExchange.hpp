@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:18:16 by luciama2          #+#    #+#             */
-/*   Updated: 2025/04/01 20:26:53 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/02 20:11:18 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,24 @@
 # include <map>
 # include <string>
 # include <utility>
+# include "Colors.hpp"
 
 /* Structs -------------------------------------------------------------------*/
+
+enum	Type
+{
+	DB_DATE,
+	DB_VALUE
+};
+
+// struct PrintOptions
+// {
+// 	bool	_has_limit;
+// 	int		_limit;
+
+// 	PrintOptions(int limit): _has_limit(true), _limit(limit) {};
+// 	PrintOptions(void): _has_limit(false),  _limit(0) {};
+// } ;
 
 class BitcoinExchange
 {
@@ -75,12 +91,6 @@ class BitcoinExchange
 		} ;
 } ;
 
-enum	Type
-{
-	DB_DATE,
-	DB_VALUE
-};
-
 /* Template functs -----------------------------------------------------------*/
 
 template <typename T>
@@ -104,10 +114,14 @@ T BitcoinExchange::convert(std::string input, Type t)
 		}
 		case DB_VALUE:
 		{
-			float val = static_cast<float>(convert_double(input));
-			if (val < 0.0f) 
+			double val = convert_double(input);
+			// std::cout << FG_BRIGHT_ORANGE << std::endl << val << RESET  << std::endl;
+			if (static_cast<int>(val) < 0)
+			{
+				std::cerr << "err" << std::endl;
 				throw BitcoinExchange::BadValueException();
-			return (val);
+			}
+			return (static_cast<float>(val));
 		}
 	}
 }
