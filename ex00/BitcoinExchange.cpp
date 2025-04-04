@@ -7,6 +7,7 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:19:00 by luciama2          #+#    #+#             */
 /*   Updated: 2025/04/02 20:22:14 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/02 20:22:14 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +43,7 @@ void BitcoinExchange::loadDB(void)
 		std::string value = line.substr(line.find_first_of(',') + 1, line.size());
 		time_t d = this->convert<time_t>(date, DB_DATE);
 		float v = this->convert<float>(value, DB_VALUE);
+		std::cout <<  "pair : " << std::pair<time_t, float>(d, v).first <<"-"<< std::pair<time_t, float>(d, v).second << std::endl;
 		std::cout <<  "pair : " << std::pair<time_t, float>(d, v).first <<"-"<< std::pair<time_t, float>(d, v).second << std::endl;
 		this->_db.insert(std::pair<time_t, float>(d, v));
 	}
@@ -94,7 +96,9 @@ void BitcoinExchange::print(void) const
 {
 	for (std::map<time_t, float>::const_iterator it = this->_db.begin(); it != this->_db.end(); it++)
 	{
+	{
 		std::cout << "[ " << it->first << " : " << it->second << " ]" << std::endl;
+	}
 	}
 }
 
