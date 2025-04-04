@@ -23,6 +23,8 @@
 # include <map>
 # include <string>
 # include <utility>
+# include <cmath>
+# include <climits>
 # include "Colors.hpp"
 
 /* Structs -------------------------------------------------------------------*/
@@ -30,24 +32,16 @@
 enum	Type
 {
 	DB_DATE,
-	DB_VALUE
+	DB_VALUE,
+	IN_VALUE
 };
-
-// struct PrintOptions
-// {
-// 	bool	_has_limit;
-// 	int		_limit;
-
-// 	PrintOptions(int limit): _has_limit(true), _limit(limit) {};
-// 	PrintOptions(void): _has_limit(false),  _limit(0) {};
-// } ;
 
 class BitcoinExchange
 {
 	private:
-		const std::string _dbPath;
-		std::map<time_t, float> _db; // csvc++ formatter
-		
+		const std::string 		_dbPath;
+		std::map<time_t, float> _db;
+
 		void loadDB(void);
 	
 		template <typename T> T convert(std::string input, Type t);
@@ -60,12 +54,16 @@ class BitcoinExchange
 		BitcoinExchange &operator=(BitcoinExchange const &src);
 	
 		// member functions:
-		void print(void) const;
 		void loadInput(std::string input);
-		// extractPair
+		void printDB(void) const;
 	
 		// member exceptions:
-		class BadValueException : public std::exception
+		class NegativeNumberException : public std::exception
+		{
+			public:
+				const char *what() const throw();
+		};
+		class TooLargeNumberException : public std::exception
 		{
 			public:
 				const char *what() const throw();
@@ -83,12 +81,12 @@ class BitcoinExchange
 		class BadFileException : public std::exception
 		{
 			public:
-				const char *what() const throw(); //validate db and input files
+				const char *what() const throw();
 		};
 		class BadHeaderException : public std::exception 
 		{
 			public:
-				const char *what() const throw(); //validate header on input file only
+				const char *what() const throw();
 		} ;
 } ;
 
@@ -106,10 +104,10 @@ T BitcoinExchange::convert(std::string input, Type t)
 			if (tm.tm_year < 0)
 				throw BitcoinExchange::BadDateException();
 			tm.tm_mon = convert_double(input.substr(5, 2));
-			if (tm.tm_mon < 0)
+			if (tm.tm_mon < 0 || tm.tm_mon > 12)
 				throw BitcoinExchange::BadDateException();
 			tm.tm_mday = convert_double(input.substr(8, 2));
-			if (tm.tm_mday < 0)
+			if (tm.tm_mday < 0 || tm.tm_mday > 31)
 				throw BitcoinExchange::BadDateException();
 			tm.tm_hour = 0;
 			tm.tm_min = 0;
@@ -120,15 +118,21 @@ T BitcoinExchange::convert(std::string input, Type t)
 		case DB_VALUE:
 		{
 			double val = convert_double(input);
-			// std::cout << FG_BRIGHT_ORANGE << std::endl << val << RESET  << std::endl;
+			if (val > INT_MAX)
+				throw BitcoinExchange::TooLargeNumberException();
 			if (static_cast<int>(val) < 0)
-			{
-				// std::cerr << "err" << std::endl;
-				throw BitcoinExchange::BadValueException();
-			}
+				throw BitcoinExchange::NegativeNumberException();
 			return (static_cast<float>(val));
 		}
-
+		case IN_VALUE:
+		{
+			double val = convert_double(input);
+			if (val > 1000)
+				throw BitcoinExchange::TooLargeNumberException();
+			if (static_cast<int>(val) < 0)
+				throw BitcoinExchange::NegativeNumberException();
+			return (static_cast<float>(val));
+		}
 	}
 }
 

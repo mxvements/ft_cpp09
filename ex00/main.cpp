@@ -32,12 +32,16 @@
  */
 int main(int argc, char **argv)
 {
-	if (argc != 2)
-		throw BitcoinExchange::BadArgumentsException();
+	try {
+		if (argc != 2)
+			throw BitcoinExchange::BadArgumentsException();
 
-	BitcoinExchange bc("./cpp_09/data.csv");
-	bc.print();
-	bc.loadInput(argv[1]);
+		BitcoinExchange bc("./cpp_09/data.csv");
+		// bc.printDB();
+		bc.loadInput(argv[1]);
+	} catch (const std::exception &e){
+		std::cerr << e.what() << std::endl;
+	}
 	
 	return (0);
 }

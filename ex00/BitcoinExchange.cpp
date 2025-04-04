@@ -24,6 +24,8 @@ double BitcoinExchange::convert_double(std::string input)
 	end_str = end_ptr;
 	if (end_str.length() > 0 || errno)
 		return (-1);
+	if (result < 0)
+		throw BitcoinExchange::NegativeNumberException();
 	return (result);
 }
 
@@ -43,9 +45,9 @@ void BitcoinExchange::loadDB(void)
 		std::string value = line.substr(line.find_first_of(',') + 1, line.size());
 		time_t d = this->convert<time_t>(date, DB_DATE);
 		float v = this->convert<float>(value, DB_VALUE);
-		std::cout <<  "pair : " << std::pair<time_t, float>(d, v).first <<"-"<< std::pair<time_t, float>(d, v).second << std::endl;
-		std::cout <<  "pair : " << std::pair<time_t, float>(d, v).first <<"-"<< std::pair<time_t, float>(d, v).second << std::endl;
-		this->_db.insert(std::pair<time_t, float>(d, v));
+		
+		std::pair<time_t, float> pair = std::pair<time_t, float>(d, v);
+		this->_db.insert(pair);
 	}
 	dbFile.close();
 }
@@ -69,13 +71,17 @@ BitcoinExchange &BitcoinExchange::operator=(BitcoinExchange const &src)
 
 /* Exceptions ----------------------------------------------------------------*/
 
-const char *BitcoinExchange::BadValueException::what() const throw()
+const char *BitcoinExchange::NegativeNumberException::what() const throw()
 {
-	return "Error : Bad value";
+	return "Error : Bad value : Not a positive number";
+}
+const char *BitcoinExchange::TooLargeNumberException::what() const throw()
+{
+	return "Error : Bad value : Too large a number";
 }
 const char *BitcoinExchange::BadDateException::what() const throw()
 {
-	return "Error : Bad date";
+	return "Error : Bad  date";
 }
 const char *BitcoinExchange::BadArgumentsException::what() const throw()
 {
@@ -92,14 +98,10 @@ const char *BitcoinExchange::BadHeaderException::what() const throw()
 
 /* Member functs -------------------------------------------------------------*/
 
-void BitcoinExchange::print(void) const
+void BitcoinExchange::printDB(void) const
 {
 	for (std::map<time_t, float>::const_iterator it = this->_db.begin(); it != this->_db.end(); it++)
-	{
-	{
 		std::cout << "[ " << it->first << " : " << it->second << " ]" << std::endl;
-	}
-	}
 }
 
 void BitcoinExchange::loadInput(std::string input)
@@ -109,26 +111,30 @@ void BitcoinExchange::loadInput(std::string input)
 		throw BitcoinExchange::BadFileException();
 		
 	std::string line;
-	int header = 0;
+	if (std::getline(inputFile, line) && line != "date | value")
+		throw BitcoinExchange::BadHeaderException();
+	
 	while (std::getline(inputFile, line))
 	{
-		if (header++ == 0)
-		{
-			if (line != "date | value")
-				throw BitcoinExchange::BadHeaderException();
-			continue;
-		}
-		std::string date = line.substr(0, line.find_first_of('|'));
-		std::string value = line.substr(line.find_first_of('|') + 1, line.size());
-		time_t d;
-		float v;
 		try {
-			d = this->convert<time_t>(date, DB_DATE);
-			v = this->convert<float>(value, DB_VALUE);
+			std::string date = line.substr(0, line.find_first_of('|'));
+			std::string value = line.substr(line.find_first_of('|') + 1, line.size());
+			time_t  d = this->convert<time_t>(date, DB_DATE);
+			float v = this->convert<float>(value, IN_VALUE) ;
+
+			std::pair<time_t, float> pair = std::pair<time_t, float>(d, v);
+			std::map<time_t, float>::iterator db_element = this->_db.lower_bound(pair.first);
+
+			struct tm *tm = std::gmtime(&(pair.first));
+			float exchange = pair.second * db_element->second;
+
+			std::cout 	<< tm->tm_year << "-" << tm->tm_mon << "-" << tm->tm_mday 
+						<< " => " << pair.second 
+						<< " => " << exchange
+						<< std::endl;
 		} catch (const std::exception &e){
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << line << " " << d << " " << v << std::endl;
 	}
 	
 	inputFile.close();
