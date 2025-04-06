@@ -1,8 +1,8 @@
-NAME=	pmergeme
+NAME=	PmergeMe
 CC=		c++
 FLAGS=	-Wall -Wextra -Werror -std=c++98 -g3
 
-SRC= 	main.cpp
+SRC= 	main.cpp PmergeMe.cpp
 OBJ_P=	./obj/
 OBJ=	$(SRC:%.cpp=$(OBJ_P)%.o)
 
