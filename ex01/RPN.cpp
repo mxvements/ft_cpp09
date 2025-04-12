@@ -33,14 +33,19 @@ RPN::RPN(std::string input)
 {
 
 	Type type;
+	const int input_size = input.size() - 1;
 
-	for (int i = input.size() - 1; i >= 0; i--)
+	if (charCheck(input[input_size]) != OP)
+		throw RPN::InvalidCharException();
+	for (int i = input_size; i >= 0; i--)
 	{
 		type = charCheck(input[i]);
-		if ((i % 2 != 0) && (std::isspace(static_cast<unsigned char>(input[i])) == 0))
-			throw RPN::InvalidCharException();
-		else if (i % 2 == 0 && type != ERROR)
+		if ((i % 2 != 0) && type == SP)
+			continue;
+		else if (i % 2 == 0 && (type == OP || type == NBR))
 			this->_stack.push(input[i]);
+		else
+			throw RPN::InvalidCharException();
 	}
 
 	while (this->_stack.size() > 0)
@@ -92,6 +97,8 @@ Type RPN::charCheck(const char c)
 		return (OP);
 	if (std::isdigit(static_cast<int>(c)))
 		return (NBR);
+	if (std::isspace(c))
+		return (SP);
 	return (ERROR);
 }
 int RPN::calculator(int a, int b, char op){

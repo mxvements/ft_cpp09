@@ -25,6 +25,7 @@
 enum Type {
 	NBR,
 	OP,
+	SP,
 	ERROR
 };
 
