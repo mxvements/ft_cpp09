@@ -12,7 +12,12 @@
 
 # include "PmergeMe.hpp"
 
-int main(void)
-{
+int main(int argc, char **argv)
+{	
+	std::vector<std::string> input(argv + 1, argv + argc);
+	PmergeMe pm(input);
+	pm.printVector();
+	std::cout << std::endl;
+	pm.printDeque();
 	return (0);
 }
