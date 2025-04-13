@@ -6,7 +6,7 @@
 /*   By: lucia <lucia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:23 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/06 20:32:24 by lucia            ###   ########.fr       */
+/*   Updated: 2025/04/13 23:15:14 by lucia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,16 @@ class PmergeMe {
         PmergeMe(const PmergeMe &src);
         PmergeMe &operator=(const PmergeMe &src);
 
-        void printVector(void);
-        void printDeque(void);
-        //sort
+		std::vector<int> &getVector(void);
+		std::deque<int> &getDeque(void);
 
-        //templated functions to do the merge sort -> not possible, since they dont share methods
+        void printVector(const std::vector<int> &input);
+        void printDeque(const std::deque<int> &input);
+        
+		//sort
+		std::vector<int> &swapVector(std::vector<int> &v);
+		std::vector<int> mergeVector(const std::vector<int> &v1, const std::vector<int> &v2);
+		std::vector<int> &mergeInsertSortVector(std::vector<int> &input);
         
 
 } ;
