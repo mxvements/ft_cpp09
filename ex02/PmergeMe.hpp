@@ -33,7 +33,7 @@ class PmergeMe {
     private:
         std::vector<int> _vector;
         std::deque<int> _deque;
-
+        void binaryInsertVector(std::vector<int> &vector, int val);
     public:
         ~PmergeMe(void);
         PmergeMe(std::vector<std::string> &input);
@@ -47,8 +47,6 @@ class PmergeMe {
         void printDeque(const std::deque<int> &input);
         
 		//sort
-		std::vector<int> &swapVector(std::vector<int> &v);
-		std::vector<int> mergeVector(const std::vector<int> &v1, const std::vector<int> &v2);
 		std::vector<int> &mergeInsertSortVector(std::vector<int> &input);
         
 

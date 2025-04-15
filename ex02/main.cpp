@@ -24,6 +24,6 @@ int main(int argc, char **argv)
 	// std::cout << std::endl;
 
 	std::vector<int> sorted = pm.mergeInsertSortVector(pm.getVector());
-	pm.printVector(sorted);
+	// pm.printVector(sorted);
 	return (0);
 }

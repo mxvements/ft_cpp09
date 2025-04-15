@@ -76,66 +76,52 @@ void PmergeMe::printDeque(const std::deque<int> &input)
  * 2 - sort those array of len 2
  * 3 - merge (2 sorted arrays into 2 sorted arrays, is 'two finger' function)
  */
-
-std::vector<int> &PmergeMe::swapVector(std::vector<int> &v)
+void PmergeMe::binaryInsertVector(std::vector<int> &vector, int val)
 {
-	int tmp;
-	if (*(v.begin()) > *(v.end() - 1))
-	{
-		tmp = *(v.begin());
-		*v.begin() = *(v.end() - 1);
-		*(v.end() - 1) = tmp;
-	}
-	return (v);
-}
-
-std::vector<int> PmergeMe::mergeVector(const std::vector<int> &v1, const std::vector<int> &v2)
-{
-	std::vector<int> rslt;
-	std::vector<int>::const_iterator i1 = v1.begin();
-	std::vector<int>::const_iterator i2 = v2.begin();
-
-	while (i1 != v1.end() && i2 != v2.end())
-	{
-		if (*i1 <= *i2)
-		{
-			rslt.push_back(*i1);
-			++i1;
-		}
-		if (*i2 < *i1)
-		{
-			rslt.push_back(*i2);
-			++i2;
-		}
-	}
-	while (i1 != v1.end() && i2 == v2.end())
-	{
-		rslt.push_back(*i1);
-		++i1;
-	}
-	while (i2 != v2.end() && i1 == v1.end())
-	{
-		rslt.push_back(*i2);
-		++i2;
-	}
-	return (rslt);
+	std::vector<int>::iterator lower = std::lower_bound(vector.begin(), vector.end(), val);
+	vector.insert(lower, val);
 }
 
 std::vector<int> &PmergeMe::mergeInsertSortVector(std::vector<int> &input)
 {
-	size_t size = input.size();
-	if (size > 2)
+	std::vector<int> smaller;
+	std::vector<int> larger;
+	int size = input.size();
+	
+	if (size < 2)
+		return input;
+	
+	// make random pairs of two and sort them in increasing order
+	for (std::vector<int>::iterator i = input.begin(); i < input.end() - 1; i += 2)
 	{
-		//todo: change to use of iterators/references to avoid copying the array
-		//will need to change the call on this function since the recursivity is here
-		std::vector<int> lhs(input.begin(), input.end() - (size / 2));
-		std::vector<int> rhs(input.end() - (size / 2), input.end());
-		mergeInsertSortVector(lhs);
-		mergeInsertSortVector(rhs);
-		input = mergeVector(lhs, rhs);
+		int lhs = *i;
+		int rhs = *(i + 1);
+		if (lhs <= rhs)
+		{
+			smaller.push_back(lhs);
+			larger.push_back(rhs);
+		}
+		else
+		{
+			smaller.push_back(rhs);
+			larger.push_back(lhs);
+		}
 	}
-	else if (size == 2)
-		this->swapVector(input);
+
+	int leftover;
+	if (size % 2 != 0)
+		leftover = input[size - 1];
+
+	this->printVector(smaller);
+	// sort the pairs considering the first element (so the pairs are sorted)
+	std::vector<int> sorted = mergeInsertSortVector(smaller);
+
+	for (std::vector<int>::iterator i = larger.begin(); i < larger.end(); i++)
+	{
+		binaryInsertVector(larger, *i);
+	}
+	if (size % 2 != 0)
+		binaryInsertVector(larger, leftover);
 	
 	return (input);
 }
