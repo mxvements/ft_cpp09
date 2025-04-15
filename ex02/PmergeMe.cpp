@@ -87,6 +87,7 @@ std::vector<int> &PmergeMe::mergeInsertSortVector(std::vector<int> &input)
 	std::vector<int> smaller;
 	std::vector<int> larger;
 	int size = input.size();
+	bool isOdd = size % 2 != 0;
 	
 	if (size < 2)
 		return input;
@@ -109,19 +110,22 @@ std::vector<int> &PmergeMe::mergeInsertSortVector(std::vector<int> &input)
 	}
 
 	int leftover;
-	if (size % 2 != 0)
+	if (isOdd)
 		leftover = input[size - 1];
 
-	this->printVector(smaller);
-	// sort the pairs considering the first element (so the pairs are sorted)
-	std::vector<int> sorted = mergeInsertSortVector(smaller);
+	// this->printVector(larger);
+	// std::cout << std::endl;
 
-	for (std::vector<int>::iterator i = larger.begin(); i < larger.end(); i++)
-	{
-		binaryInsertVector(larger, *i);
-	}
-	if (size % 2 != 0)
-		binaryInsertVector(larger, leftover);
-	
+	// sort the pairs considering the first element (so the pairs are sorted)
+	std::vector<int> sorted = mergeInsertSortVector(larger);
+
+	for (std::vector<int>::iterator i = smaller.begin(); i < smaller.end(); i++)
+		binaryInsertVector(sorted, *i);
+
+	if (isOdd)
+		binaryInsertVector(sorted, leftover);
+
+	std::cout << "rslt : " << std::endl;
+	this->printVector(sorted); //larger is on the stack!
 	return (input);
 }
