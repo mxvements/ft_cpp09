@@ -12,18 +12,23 @@
 
 # include "PmergeMe.hpp"
 
+/**
+ * ./PmergeMe `shuf -i 1-100000 -n 3000 | tr "\n" " "`
+ */
 int main(int argc, char **argv)
 {	
 	//argument error
 	std::vector<std::string> input(argv + 1, argv + argc);
 	PmergeMe pm(input);
-	
-	// pm.printVector(pm.getVector());
-	// std::cout << std::endl;
-	// pm.printDeque(pm.getDeque());
-	// std::cout << std::endl;
 
 	std::vector<int> sorted = pm.mergeInsertSortVector(pm.getVector());
+
+	std::cout << "Before: ";
+	pm.printVector(pm.getVector());
+	std::cout << std::endl;
+	std::cout << "After: ";
 	pm.printVector(sorted);
+	std::cout << std::endl;
+	std::cout << pm.getVectorBenchmark() << std::endl;
 	return (0);
 }
