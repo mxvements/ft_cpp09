@@ -33,7 +33,9 @@ class PmergeMe {
     private:
         std::vector<int> _vector;
         std::deque<int> _deque;
+
         void binaryInsertVector(std::vector<int> &vector, int val);
+        
     public:
         ~PmergeMe(void);
         PmergeMe(std::vector<std::string> &input);
