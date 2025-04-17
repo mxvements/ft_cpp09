@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucia <lucia@student.42.fr>                +#+  +:+       +#+        */
+/*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:26 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/13 23:19:20 by lucia            ###   ########.fr       */
+/*   Updated: 2025/04/17 20:48:39 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,10 @@ PmergeMe::~PmergeMe(void) {}
 PmergeMe::PmergeMe(std::vector<std::string> &input) : _vectorBenchmark("vector"), _dequeBenchmark("deque")
 {
 	for (std::vector<std::string>::const_iterator i = input.begin(); i != input.end(); i++)
-	{
-		this->_vector.push_back(atoi((*i).c_str()));
-		this->_deque.push_back(atoi((*i).c_str()));
+	{	
+		std::string value = *i;
+		this->_vector.push_back(atoi(value.c_str()));
+		this->_deque.push_back(atoi(value.c_str()));
 	}
 	this->_vectorBenchmark.setSize(this->_vector.size());
 	this->_dequeBenchmark.setSize(this->_deque.size());
@@ -108,24 +109,6 @@ std::deque<int> &PmergeMe::getDeque(void)
 	return this->_deque;
 }
 
-void PmergeMe::printVector(const std::vector<int> &input)
-{
-	for (std::vector<int>::const_iterator i = input.begin(); i < input.end(); i++)
-	{
-		std::cout << *i << " ";
-	}
-	std::cout << std::endl;
-}
-
-void PmergeMe::printDeque(const std::deque<int> &input)
-{
-	for (std::deque<int>::const_iterator i = input.begin(); i < input.end(); i++)
-	{
-		std::cout << *i << " ";
-	}
-	std::cout << std::endl;
-}
-
 const Benchmark &PmergeMe::getVectorBenchmark(void) const
 {
 	return this->_vectorBenchmark;
@@ -144,11 +127,6 @@ const Benchmark &PmergeMe::getDequeBenchmark(void) const
  * 2 - sort those array of len 2
  * 3 - merge (2 sorted arrays into 2 sorted arrays, is 'two finger' function)
  */
-void PmergeMe::binaryInsertVector(std::vector<int> &vector, int val)
-{
-	std::vector<int>::iterator lower = std::lower_bound(vector.begin(), vector.end(), val);
-	vector.insert(lower, val);
-}
 
 std::vector<int> &PmergeMe::mergeInsertSortVector(std::vector<int> &input)
 {
@@ -186,11 +164,62 @@ std::vector<int> &PmergeMe::mergeInsertSortVector(std::vector<int> &input)
 	input = mergeInsertSortVector(larger);
 
 	for (std::vector<int>::iterator i = smaller.begin(); i < smaller.end(); i++)
-		binaryInsertVector(input, *i);
+		binaryInsert<std::vector<int> >(input, *i);
 
 	if (isOdd)
-		binaryInsertVector(input, leftover);
+		binaryInsert<std::vector<int> >(input, leftover);
 
 	this->_vectorBenchmark.setEnd(std::clock());
+	return (input);
+}
+
+std::deque<int> &PmergeMe::mergeInsertSortDeque(std::deque<int> &input)
+{
+	std::deque<int> smaller;
+	std::deque<int> larger;
+	int leftover;
+
+	this->_dequeBenchmark.setStart(std::clock());
+	int size = input.size();
+	bool isOdd = size % 2 != 0;
+
+	if (size < 2)
+		return input;
+
+	for (std::deque<int>::iterator i = input.begin(); i != input.end(); )
+	{
+		std::deque<int>::iterator next = i ;
+		std::advance(next, 1);
+		
+		if (next == input.end())
+			break ;
+		
+		int lhs = *i;
+		int rhs = *next;
+		if (lhs <= rhs)
+		{
+			smaller.push_back(lhs);
+			larger.push_back(rhs);
+		}
+		else
+		{
+			smaller.push_back(rhs);
+			larger.push_back(lhs);
+		}
+		std::advance(i, 2);
+	}
+
+	if (isOdd)
+		leftover = input[size - 1];
+
+	input = mergeInsertSortDeque(larger);
+
+	for (std::deque<int>::iterator i = smaller.begin(); i < smaller.end(); i++)
+		binaryInsert<std::deque<int> >(input, *i);
+
+	if (isOdd)
+		binaryInsert<std::deque<int> >(input, leftover);
+
+	this->_dequeBenchmark.setEnd(std::clock());
 	return (input);
 }

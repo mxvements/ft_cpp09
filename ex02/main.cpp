@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucia <lucia@student.42.fr>                +#+  +:+       +#+        */
+/*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:25:26 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/13 23:13:05 by lucia            ###   ########.fr       */
+/*   Updated: 2025/04/17 20:36:38 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,29 @@ int main(int argc, char **argv)
 	std::vector<std::string> input(argv + 1, argv + argc);
 	PmergeMe pm(input);
 
-	std::vector<int> sorted = pm.mergeInsertSortVector(pm.getVector());
 
-	std::cout << "Before: ";
-	pm.printVector(pm.getVector());
+	std::cout << "Before : vector : ";
+	pm.print<std::vector<int> >(pm.getVector());
 	std::cout << std::endl;
-	std::cout << "After: ";
-	pm.printVector(sorted);
+	
+	std::vector<int> sortedVector = pm.mergeInsertSortVector(pm.getVector());
+	
+	std::cout << "After : vector : ";
+	pm.print<std::vector<int> >(sortedVector);
 	std::cout << std::endl;
-	std::cout << pm.getVectorBenchmark() << std::endl;
+
+
+	std::cout << "Before : deque : ";
+	pm.print<std::deque<int> >(pm.getDeque());
+	std::cout << std::endl;
+	
+	std::deque<int> sortedDeque = pm.mergeInsertSortDeque(pm.getDeque());
+	
+	std::cout << "After : deque : ";
+	pm.print<std::deque<int> >(sortedDeque);
+	std::cout << std::endl;
+	
+	std::cout << pm.getVectorBenchmark();
+	std::cout << pm.getDequeBenchmark();
 	return (0);
 }
