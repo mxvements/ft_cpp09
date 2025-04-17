@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:26 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/17 20:48:39 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/17 21:02:30 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,12 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &src)
 /* ************************************************************************** */
 /* PMERGEME public methods  */
 
-std::vector<int> &PmergeMe::getVector(void)
+const std::vector<int> &PmergeMe::getVector(void) const 
 {
 	return this->_vector;
 }
 
-std::deque<int> &PmergeMe::getDeque(void)
+const std::deque<int> &PmergeMe::getDeque(void) const
 {
 	return this->_deque;
 }
@@ -141,7 +141,6 @@ std::vector<int> &PmergeMe::mergeInsertSortVector(std::vector<int> &input)
 	if (size < 2)
 		return input;
 
-	// make random pairs of two and sort them in increasing order
 	for (std::vector<int>::iterator i = input.begin(); i < input.end() - 1; i += 2)
 	{
 		int lhs = *i;

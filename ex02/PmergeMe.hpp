@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:23 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/17 20:13:58 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:59:41 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ class PmergeMe
 		PmergeMe(const PmergeMe &src);
 		PmergeMe &operator=(const PmergeMe &src);
 	
-		std::vector<int> &getVector(void);
-		std::deque<int> &getDeque(void);
+		const std::vector<int> &getVector(void) const;
+		const std::deque<int> &getDeque(void) const;
 		const Benchmark &getVectorBenchmark(void) const;
 		const Benchmark &getDequeBenchmark(void) const;
 	
