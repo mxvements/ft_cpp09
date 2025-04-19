@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 16:51:26 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/19 20:35:47 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/19 22:19:33 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ RPN::RPN(std::string input)
 			this->_calc_stack.push(element - '0');
 		else if (type == OP)
 		{
-			if (this->_calc_stack.size() != 2)
+			if (this->_calc_stack.size() < 2)
 				throw RPN::BadStackException();
 			const int b = this->_calc_stack.top();
 			this->_calc_stack.pop();
