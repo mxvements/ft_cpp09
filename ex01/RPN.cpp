@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RPN.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucia <lucia@student.42.fr>                +#+  +:+       +#+        */
+/*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 16:51:26 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/06 19:13:52 by lucia            ###   ########.fr       */
+/*   Updated: 2025/04/19 20:19:48 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,14 @@ RPN::RPN(std::string input)
 		type = charCheck(element);
 		if (type == NBR)
 			this->_calc_stack.push(element - '0');
-		if (type == OP){
+		else if (type == OP)
+		{
+			if (this->_calc_stack.size() != 2)
+				throw RPN::BadStackException();
 			const int b = this->_calc_stack.top();
 			this->_calc_stack.pop();
 			const int a = this->_calc_stack.top();
 			this->_calc_stack.pop();
-			if (this->_calc_stack.size() > 0)
-				throw RPN::BadStackException();
 			int rslt = calculator(a, b, element);
 			this->_calc_stack.push((rslt));
 		}
@@ -68,7 +69,8 @@ RPN::RPN(std::string input)
 	}
 }
 
-std::stack<int> RPN::getCalcStack(void){
+std::stack<int> RPN::getCalcStack(void)
+{
 	return this->_calc_stack;
 }
 
@@ -86,7 +88,7 @@ const char *RPN::InvalidArgumentsException::what() const throw()
 
 const char *RPN::BadStackException::what() const throw()
 {
-	return "Error :  wrong stack, check order";
+	return "Error :  wrong stack, check nbr/op order";
 }
 
 /* ************************************************************************** */
@@ -101,20 +103,20 @@ Type RPN::charCheck(const char c)
 		return (SP);
 	return (ERROR);
 }
-int RPN::calculator(int a, int b, char op){
+int RPN::calculator(int a, int b, char op)
+{
 	switch (op)
 	{
-		case '+':
-			return (a + b);
-		case '-':
-			return (a - b);
-		case '*':
-			return (a * b);
-		case '/':
-			return (a / b);
-		default:
-			throw RPN::InvalidCharException();
+	case '+':
+		return (a + b);
+	case '-':
+		return (a - b);
+	case '*':
+		return (a * b);
+	case '/':
+		return (a / b);
+	default:
+		throw RPN::InvalidCharException();
 	}
 	return (0);
 }
-
