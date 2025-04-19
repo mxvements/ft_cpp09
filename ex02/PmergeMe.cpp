@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:26 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/17 21:02:30 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/19 20:26:52 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,12 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &src)
 /* ************************************************************************** */
 /* PMERGEME public methods  */
 
-const std::vector<int> &PmergeMe::getVector(void) const 
+std::vector<int> &PmergeMe::getVector(void)
 {
 	return this->_vector;
 }
 
-const std::deque<int> &PmergeMe::getDeque(void) const
+std::deque<int> &PmergeMe::getDeque(void)
 {
 	return this->_deque;
 }
