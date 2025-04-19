@@ -6,8 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:19:00 by luciama2          #+#    #+#             */
-/*   Updated: 2025/04/02 20:22:14 by luciama2         ###   ########.fr       */
-/*   Updated: 2025/04/02 20:22:14 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:19:22 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +44,7 @@ void BitcoinExchange::loadDB(void)
 		std::string value = line.substr(line.find_first_of(',') + 1, line.size());
 		time_t d = this->convert<time_t>(date, DB_DATE);
 		float v = this->convert<float>(value, DB_VALUE);
-		
+
 		std::pair<time_t, float> pair = std::pair<time_t, float>(d, v);
 		this->_db.insert(pair);
 	}
@@ -65,7 +64,9 @@ BitcoinExchange::BitcoinExchange(BitcoinExchange const &src) : _dbPath(src._dbPa
 
 BitcoinExchange &BitcoinExchange::operator=(BitcoinExchange const &src)
 {
-	if (this != &src) { }
+	if (this != &src)
+	{
+	}
 	return (*this);
 }
 
@@ -109,33 +110,45 @@ void BitcoinExchange::loadInput(std::string input)
 	std::ifstream inputFile(input.c_str());
 	if (!inputFile)
 		throw BitcoinExchange::BadFileException();
-		
+
 	std::string line;
 	if (std::getline(inputFile, line) && line != "date | value")
 		throw BitcoinExchange::BadHeaderException();
-	
+
 	while (std::getline(inputFile, line))
 	{
-		try {
-			std::string date = line.substr(0, line.find_first_of('|'));
-			std::string value = line.substr(line.find_first_of('|') + 1, line.size());
-			time_t  d = this->convert<time_t>(date, DB_DATE);
-			float v = this->convert<float>(value, IN_VALUE) ;
+		try
+		{
+			size_t delimiter = line.find_first_of('|');
+			if (delimiter < 10)
+				throw BitcoinExchange::BadDateException();
+			std::string date = line.substr(0, delimiter);
+			std::string value = line.substr(delimiter + 1, line.size());
+			time_t d = this->convert<time_t>(date, DB_DATE);
+			float v = this->convert<float>(value, IN_VALUE);
 
 			std::pair<time_t, float> pair = std::pair<time_t, float>(d, v);
 			std::map<time_t, float>::iterator db_element = this->_db.lower_bound(pair.first);
+			if (db_element != this->_db.begin() && db_element->first != pair.first)
+				--db_element;
 
-			struct tm *tm = std::gmtime(&(pair.first));
+			struct tm *tm = std::localtime(&(pair.first));
 			float exchange = pair.second * db_element->second;
 
-			std::cout 	<< tm->tm_year << "-" << tm->tm_mon << "-" << tm->tm_mday 
-						<< " => " << pair.second 
-						<< " => " << exchange
-						<< std::endl;
-		} catch (const std::exception &e){
+			std::cout << (tm->tm_year + 1900)
+					  << "-"
+					  << std::setw(2) << std::setfill('0') << (tm->tm_mon + 1)
+					  << "-"
+					  << std::setw(2) << std::setfill('0') << tm->tm_mday
+					  << " => " << pair.second
+					  << " => " << exchange
+					  << std::endl;
+		}
+		catch (const std::exception &e)
+		{
 			std::cerr << e.what() << std::endl;
 		}
 	}
-	
+
 	inputFile.close();
 }

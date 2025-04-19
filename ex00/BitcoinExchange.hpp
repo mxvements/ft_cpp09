@@ -6,10 +6,10 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:18:16 by luciama2          #+#    #+#             */
-/*   Updated: 2025/04/02 20:11:18 by luciama2         ###   ########.fr       */
-/*   Updated: 2025/04/02 20:11:18 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/19 18:56:04 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef BITCOINEXCHANGE_HPP
 # define BITCOINEXCHANGE_HPP
@@ -100,10 +100,10 @@ T BitcoinExchange::convert(std::string input, Type t)
 		case DB_DATE:
 		{
 			struct tm tm;
-			tm.tm_year = convert_double(input.substr(0, 4));
+			tm.tm_year = convert_double(input.substr(0, 4)) - 1900;
 			if (tm.tm_year < 0)
 				throw BitcoinExchange::BadDateException();
-			tm.tm_mon = convert_double(input.substr(5, 2));
+			tm.tm_mon = convert_double(input.substr(5, 2)) - 1;
 			if (tm.tm_mon < 0 || tm.tm_mon > 12)
 				throw BitcoinExchange::BadDateException();
 			tm.tm_mday = convert_double(input.substr(8, 2));
@@ -111,7 +111,8 @@ T BitcoinExchange::convert(std::string input, Type t)
 				throw BitcoinExchange::BadDateException();
 			tm.tm_hour = 0;
 			tm.tm_min = 0;
-			tm.tm_isdst = 0;
+			tm.tm_sec = 0;
+			tm.tm_isdst = -1;
 			time_t t = std::mktime(&tm);
 			return (t);
 		}
