@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:23 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/21 19:06:02 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/21 20:46:59 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ class PmergeMe
 			while (first < last)
 			{
 				typename Container::iterator mid = first + (last - first) / 2;
-				b.addComparisonCount();
+				b.addComparisons();
 				if (val < *mid)
 					last = mid;
 				else
@@ -72,6 +72,9 @@ class PmergeMe
 		// sort
 		std::vector<int> &mergeInsertSortVector(std::vector<int> &input);
 		std::deque<int> &mergeInsertSortDeque(std::deque<int> &input);
+
+		std::vector<int> &fordJohnsonSortVector(std::vector<int> &input);
+		std::deque<int> &fordJohnsonSortDeque(std::deque<int> &input);
 	
 		template <typename Container>
 		void print(const Container &input) const
@@ -83,6 +86,5 @@ class PmergeMe
 			std::cout << std::endl;
 		};
 };
-
 
 #endif

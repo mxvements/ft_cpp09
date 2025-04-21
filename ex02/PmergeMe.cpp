@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:26 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/21 19:01:35 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/21 20:43:45 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,6 @@ const Benchmark &PmergeMe::getDequeBenchmark(void) const
  * 2 - sort those array of len 2
  * 3 - merge (2 sorted arrays into 2 sorted arrays, is 'two finger' function)
  */
-
-/**
- * Ford Johnson optimization:
- * - Uses a Tournament Tree or Pairing tree structure to help determine the optimal
- * insertion path for each smaller element
- * - Optimal insertion order: it calculates the optimal order in which to insert elements
- * to minimize comparisons.
- */
 std::vector<int> &PmergeMe::mergeInsertSortVector(std::vector<int> &input)
 {
 	std::vector<int> smaller;
@@ -112,7 +104,7 @@ std::vector<int> &PmergeMe::mergeInsertSortVector(std::vector<int> &input)
 			smaller.push_back(rhs);
 			larger.push_back(lhs);
 		}
-		this->_vectorBenchmark.addComparisonCount();
+		this->_vectorBenchmark.addComparisons();
 	}
 
 	if (isOdd)
@@ -163,7 +155,7 @@ std::deque<int> &PmergeMe::mergeInsertSortDeque(std::deque<int> &input)
 			smaller.push_back(rhs);
 			larger.push_back(lhs);
 		}
-		this->_dequeBenchmark.addComparisonCount();
+		this->_dequeBenchmark.addComparisons();
 		std::advance(i, 2);
 	}
 
@@ -181,3 +173,11 @@ std::deque<int> &PmergeMe::mergeInsertSortDeque(std::deque<int> &input)
 	this->_dequeBenchmark.setEnd(std::clock());
 	return (input);
 }
+
+/**
+ * Ford Johnson optimization:
+ * - Uses a Tournament Tree or Pairing tree structure to help determine the optimal
+ * insertion path for each smaller element
+ * - Optimal insertion order: it calculates the optimal order in which to insert elements
+ * to minimize comparisons.
+ */
