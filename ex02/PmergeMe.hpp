@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:23 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/19 20:26:29 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:40:57 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <vector>
 #include <cctype>
 #include <ctime>
+#include "Benchmark.hpp"
 
 /**
  * use of STL in the project, none of the containers should be used twice
@@ -30,30 +31,6 @@
  * rpn -> stacks (int and string)
  * merge insert -> vector and deque (2 containers for comparison)
  */
-
-class Benchmark
-{
-private:
-	const std::string _type;
-	int _size;
-	std::clock_t _start;
-	std::clock_t _end;
-
-public:
-	~Benchmark(void);
-	Benchmark(std::string type);
-	Benchmark(const Benchmark &src);
-	Benchmark &operator=(const Benchmark &src);
-
-	void setStart(std::clock_t start);
-	void setEnd(std::clock_t end);
-	void setSize(int size);
-	const std::clock_t &getStart(void) const;
-	const std::clock_t &getEnd(void) const;
-	const int &getSize(void) const;
-	const std::string &getType(void) const;
-};
-std::ostream &operator<<(std::ostream &os, const Benchmark &b);
 
 class PmergeMe
 {
