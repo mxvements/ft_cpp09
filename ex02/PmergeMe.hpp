@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:23 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/21 18:40:57 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:06:02 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,21 @@ class PmergeMe
 		Benchmark _dequeBenchmark;
 
 		template <typename Container>
-		void binaryInsert(Container &c, int val)
+		void binaryInsert(Container &c, int val, Benchmark &b)
 		{
-			typename Container::iterator lower = std::lower_bound(c.begin(), c.end(), val);
-			c.insert(lower, val);
+			typename Container::iterator first = c.begin();
+			typename Container::iterator last = c.end();
+			
+			while (first < last)
+			{
+				typename Container::iterator mid = first + (last - first) / 2;
+				b.addComparisonCount();
+				if (val < *mid)
+					last = mid;
+				else
+					first = mid + 1;
+			}
+			c.insert(first, val);
 		}
 	
 	public:

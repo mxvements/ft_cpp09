@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:26 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/21 18:41:28 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:01:35 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ std::vector<int> &PmergeMe::mergeInsertSortVector(std::vector<int> &input)
 			smaller.push_back(rhs);
 			larger.push_back(lhs);
 		}
+		this->_vectorBenchmark.addComparisonCount();
 	}
 
 	if (isOdd)
@@ -120,10 +121,10 @@ std::vector<int> &PmergeMe::mergeInsertSortVector(std::vector<int> &input)
 	input = mergeInsertSortVector(larger);
 
 	for (std::vector<int>::iterator i = smaller.begin(); i < smaller.end(); i++)
-		binaryInsert<std::vector<int> >(input, *i);
+		binaryInsert<std::vector<int> >(input, *i, this->_vectorBenchmark);
 
 	if (isOdd)
-		binaryInsert<std::vector<int> >(input, leftover);
+		binaryInsert<std::vector<int> >(input, leftover, this->_vectorBenchmark);
 
 	this->_vectorBenchmark.setEnd(std::clock());
 	return (input);
@@ -162,6 +163,7 @@ std::deque<int> &PmergeMe::mergeInsertSortDeque(std::deque<int> &input)
 			smaller.push_back(rhs);
 			larger.push_back(lhs);
 		}
+		this->_dequeBenchmark.addComparisonCount();
 		std::advance(i, 2);
 	}
 
@@ -171,10 +173,10 @@ std::deque<int> &PmergeMe::mergeInsertSortDeque(std::deque<int> &input)
 	input = mergeInsertSortDeque(larger);
 
 	for (std::deque<int>::iterator i = smaller.begin(); i < smaller.end(); i++)
-		binaryInsert<std::deque<int> >(input, *i);
+		binaryInsert<std::deque<int> >(input, *i, this->_dequeBenchmark);
 
 	if (isOdd)
-		binaryInsert<std::deque<int> >(input, leftover);
+		binaryInsert<std::deque<int> >(input, leftover, this->_dequeBenchmark);
 
 	this->_dequeBenchmark.setEnd(std::clock());
 	return (input);

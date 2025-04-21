@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:39:58 by luciama2          #+#    #+#             */
-/*   Updated: 2025/04/21 18:45:38 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:54:41 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ public:
 	const int &getSize(void) const;
     const int &getComparisonCount(void) const;
 	const std::string &getType(void) const;
+	
+	void addComparisonCount(void);
 };
 std::ostream &operator<<(std::ostream &os, const Benchmark &b);
 

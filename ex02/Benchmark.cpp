@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:41:11 by luciama2          #+#    #+#             */
-/*   Updated: 2025/04/21 18:48:26 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:55:07 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* BENCHMARK orthodox canonical form  */
 Benchmark::~Benchmark(void) {}
 
-Benchmark::Benchmark(std::string type) : _type(type), _start(0), _end(0), _comparisonCount(0) {}
+Benchmark::Benchmark(std::string type) : _type(type), _comparisonCount(0), _start(0), _end(0) {}
 
 Benchmark::Benchmark(const Benchmark &src)
 {
@@ -53,6 +53,8 @@ const std::clock_t &Benchmark::getEnd(void) const { return this->_end; }
 const int &Benchmark::getSize(void) const { return this->_size; }
 const int &Benchmark::getComparisonCount(void) const {return this->_comparisonCount; }
 const std::string &Benchmark::getType(void) const { return this->_type; }
+
+void Benchmark::addComparisonCount(void) { this->_comparisonCount++;}
 
 // os overload
 std::ostream &operator<<(std::ostream &os, const Benchmark &b)
