@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:23 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/23 20:54:10 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:59:51 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ class PmergeMe
 
 		
 		template <typename Container>
-		void linearBinaryInsert(Container &c, int val, Benchmark &b)
+		void binaryInsert(Container &c, int val, Benchmark &b)
 		{
 			typename Container::iterator first = c.begin();
 			typename Container::iterator last = c.end();

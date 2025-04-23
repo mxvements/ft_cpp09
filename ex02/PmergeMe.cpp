@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:26 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/23 20:56:33 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:59:51 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,13 +141,12 @@ std::vector<int> &PmergeMe::fordJohnsonSortVector(std::vector<int> &input)
 	for (size_t i = 0; i < insertionOrder.size(); i++)
 	{
 		size_t insert_idx = insertionOrder[i];
-		linearBinaryInsert<std::vector<int> >(input, smaller[insert_idx], this->_vectorBenchmark);
+		binaryInsert<std::vector<int> >(input, smaller[insert_idx], this->_vectorBenchmark);
 	}
-	std::cout << std::endl;
 
 	// 5 - Insert the remaining one
 	if (isOdd)
-		linearBinaryInsert<std::vector<int> >(input, leftover, this->_vectorBenchmark);
+		binaryInsert<std::vector<int> >(input, leftover, this->_vectorBenchmark);
 
 	this->_vectorBenchmark.setEnd(std::clock());
 	return (input);
@@ -196,10 +195,10 @@ std::deque<int> &PmergeMe::fordJohnsonSortDeque(std::deque<int> &input)
 	input = fordJohnsonSortDeque(larger);
 
 	for (std::deque<int>::iterator i = smaller.begin(); i < smaller.end(); i++)
-		linearBinaryInsert<std::deque<int> >(input, *i, this->_dequeBenchmark);
+		binaryInsert<std::deque<int> >(input, *i, this->_dequeBenchmark);
 
 	if (isOdd)
-		linearBinaryInsert<std::deque<int> >(input, leftover, this->_dequeBenchmark);
+		binaryInsert<std::deque<int> >(input, leftover, this->_dequeBenchmark);
 
 	this->_dequeBenchmark.setEnd(std::clock());
 	return (input);
