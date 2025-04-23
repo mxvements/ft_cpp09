@@ -6,13 +6,11 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:26 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/21 20:43:45 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:56:33 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
-
-
 
 /* ************************************************************************** */
 /* PMERGEME orthodox canonical form  */
@@ -22,7 +20,7 @@ PmergeMe::~PmergeMe(void) {}
 PmergeMe::PmergeMe(std::vector<std::string> &input) : _vectorBenchmark("vector"), _dequeBenchmark("deque")
 {
 	for (std::vector<std::string>::const_iterator i = input.begin(); i != input.end(); i++)
-	{	
+	{
 		std::string value = *i;
 		this->_vector.push_back(atoi(value.c_str()));
 		this->_deque.push_back(atoi(value.c_str()));
@@ -77,7 +75,30 @@ const Benchmark &PmergeMe::getDequeBenchmark(void) const
  * 2 - sort those array of len 2
  * 3 - merge (2 sorted arrays into 2 sorted arrays, is 'two finger' function)
  */
-std::vector<int> &PmergeMe::mergeInsertSortVector(std::vector<int> &input)
+
+/* ************************************************************************** */
+
+/**
+ * Classical Ford Johnson optimization:
+ * - Uses a Tournament Tree or Pairing tree structure to help determine the optimal
+ * insertion path for each smaller element
+ * - Optimal insertion order: it calculates the optimal order in which to insert elements
+ * to minimize comparisons.
+ *
+ * These functions do not use a Tournament tree structure nor do insert using the Jacobsthal order
+ * Not the optimal for very small lists of numbers, but still performs ok in terms of comparisons
+ *
+ * Amount of comparisons expected (aprox):
+ *  n = 100 -> c = 520
+ *  n = 300 -> c = 1838
+ *  n = 500 -> c = 3167
+ *  n = 1000 -> c = 6879
+ *  n = 3000 -> c =  21840
+ *
+ * Steps commented on code  are from Wikipedia
+ */
+
+std::vector<int> &PmergeMe::fordJohnsonSortVector(std::vector<int> &input)
 {
 	std::vector<int> smaller;
 	std::vector<int> larger;
@@ -90,6 +111,8 @@ std::vector<int> &PmergeMe::mergeInsertSortVector(std::vector<int> &input)
 	if (size < 2)
 		return input;
 
+	// 1 - Group the elements from `input` into n/2 pairs of elements
+	// 2 - Perform n/2 comparisons (one per pair), to determine the larger-smaller in each pair
 	for (std::vector<int>::iterator i = input.begin(); i < input.end() - 1; i += 2)
 	{
 		int lhs = *i;
@@ -110,19 +133,27 @@ std::vector<int> &PmergeMe::mergeInsertSortVector(std::vector<int> &input)
 	if (isOdd)
 		leftover = input[size - 1];
 
-	input = mergeInsertSortVector(larger);
+	// 3 - Recursiverly sort n/2 larger elements from each pair, creating S (sorted sequence)
+	input = fordJohnsonSortVector(larger); // input == sorted larger
 
-	for (std::vector<int>::iterator i = smaller.begin(); i < smaller.end(); i++)
-		binaryInsert<std::vector<int> >(input, *i, this->_vectorBenchmark);
+	// 4 - Insert the rest using the jacobsthal sequence, avoid to insert the firstInsert
+	std::vector<size_t> insertionOrder = generateJacobsthalSequence<std::vector<size_t> >(smaller.size());
+	for (size_t i = 0; i < insertionOrder.size(); i++)
+	{
+		size_t insert_idx = insertionOrder[i];
+		linearBinaryInsert<std::vector<int> >(input, smaller[insert_idx], this->_vectorBenchmark);
+	}
+	std::cout << std::endl;
 
+	// 5 - Insert the remaining one
 	if (isOdd)
-		binaryInsert<std::vector<int> >(input, leftover, this->_vectorBenchmark);
+		linearBinaryInsert<std::vector<int> >(input, leftover, this->_vectorBenchmark);
 
 	this->_vectorBenchmark.setEnd(std::clock());
 	return (input);
 }
 
-std::deque<int> &PmergeMe::mergeInsertSortDeque(std::deque<int> &input)
+std::deque<int> &PmergeMe::fordJohnsonSortDeque(std::deque<int> &input)
 {
 	std::deque<int> smaller;
 	std::deque<int> larger;
@@ -135,14 +166,14 @@ std::deque<int> &PmergeMe::mergeInsertSortDeque(std::deque<int> &input)
 	if (size < 2)
 		return input;
 
-	for (std::deque<int>::iterator i = input.begin(); i != input.end(); )
+	for (std::deque<int>::iterator i = input.begin(); i != input.end();)
 	{
-		std::deque<int>::iterator next = i ;
+		std::deque<int>::iterator next = i;
 		std::advance(next, 1);
-		
+
 		if (next == input.end())
-			break ;
-		
+			break;
+
 		int lhs = *i;
 		int rhs = *next;
 		if (lhs <= rhs)
@@ -162,22 +193,16 @@ std::deque<int> &PmergeMe::mergeInsertSortDeque(std::deque<int> &input)
 	if (isOdd)
 		leftover = input[size - 1];
 
-	input = mergeInsertSortDeque(larger);
+	input = fordJohnsonSortDeque(larger);
 
 	for (std::deque<int>::iterator i = smaller.begin(); i < smaller.end(); i++)
-		binaryInsert<std::deque<int> >(input, *i, this->_dequeBenchmark);
+		linearBinaryInsert<std::deque<int> >(input, *i, this->_dequeBenchmark);
 
 	if (isOdd)
-		binaryInsert<std::deque<int> >(input, leftover, this->_dequeBenchmark);
+		linearBinaryInsert<std::deque<int> >(input, leftover, this->_dequeBenchmark);
 
 	this->_dequeBenchmark.setEnd(std::clock());
 	return (input);
 }
 
-/**
- * Ford Johnson optimization:
- * - Uses a Tournament Tree or Pairing tree structure to help determine the optimal
- * insertion path for each smaller element
- * - Optimal insertion order: it calculates the optimal order in which to insert elements
- * to minimize comparisons.
- */
+/* ************************************************************************** */

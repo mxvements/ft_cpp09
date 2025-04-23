@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:25:26 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/19 20:38:01 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:07:34 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 	pm.print<std::vector<int> >(pm.getVector());
 	std::cout << std::endl;
 	
-	std::vector<int> sortedVector = pm.mergeInsertSortVector(pm.getVector());
+	std::vector<int> sortedVector = pm.fordJohnsonSortVector(pm.getVector());
 	
 	std::cout << "After : vector : ";
 	pm.print<std::vector<int> >(sortedVector);
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 	pm.print<std::deque<int> >(pm.getDeque());
 	std::cout << std::endl;
 	
-	std::deque<int> sortedDeque = pm.mergeInsertSortDeque(pm.getDeque());
+	std::deque<int> sortedDeque = pm.fordJohnsonSortDeque(pm.getDeque());
 	
 	std::cout << "After : deque : ";
 	pm.print<std::deque<int> >(sortedDeque);
