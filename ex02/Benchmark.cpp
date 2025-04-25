@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:41:11 by luciama2          #+#    #+#             */
-/*   Updated: 2025/04/23 20:07:14 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/25 21:36:43 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,23 +60,23 @@ void Benchmark::addComparisons(void) { this->_comparisons++;}
 std::ostream &operator<<(std::ostream &os, const Benchmark &b)
 {
 	double microseconds = 1.0e6 * (b.getEnd() - b.getStart()) / CLOCKS_PER_SEC;
-	// return (os
-	// 		<< "Time to process a range of "
-	// 		<< b.getSize()
-    //         << " elements with std::" 
-	// 		<< b.getType()
-	// 		<< " : "
-	// 		<< std::fixed << std::setprecision(2) << microseconds
-	// 		<< " us" << std::endl);
-			
 	return (os
-		<< "Time to process a range of "
-		<< b.getSize()
-        << " elements with " 
-        << b.getComparisons() 
-        << " comparisons with std::"
-		<< b.getType()
-		<< " : "
-		<< std::fixed << std::setprecision(2) << microseconds
-		<< " us" << std::endl);
+			<< "Time to process a range of "
+			<< b.getSize()
+            << " elements with std::" 
+			<< b.getType()
+			<< " : "
+			<< std::fixed << std::setprecision(2) << microseconds
+			<< " us" << std::endl);
+			
+	// return (os
+	// 	<< "Time to process a range of "
+	// 	<< b.getSize()
+    //     << " elements with " 
+    //     << b.getComparisons() 
+    //     << " comparisons with std::"
+	// 	<< b.getType()
+	// 	<< " : "
+	// 	<< std::fixed << std::setprecision(2) << microseconds
+	// 	<< " us" << std::endl);
 }

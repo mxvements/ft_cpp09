@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:26 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/23 20:59:51 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/25 21:44:04 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,9 @@ const Benchmark &PmergeMe::getDequeBenchmark(void) const
  * - Optimal insertion order: it calculates the optimal order in which to insert elements
  * to minimize comparisons.
  *
- * These functions do not use a Tournament tree structure nor do insert using the Jacobsthal order
- * Not the optimal for very small lists of numbers, but still performs ok in terms of comparisons
+ * These functions do not use a Tournament tree structure, it kind of simulates one with the recusiveness
+ * The tournament tree keeps track of the pairs compared on the tournament
+ * We may say, this code is halway there, it's more like a single layer bracket
  *
  * Amount of comparisons expected (aprox):
  *  n = 100 -> c = 520
@@ -136,10 +137,10 @@ std::vector<int> &PmergeMe::fordJohnsonSortVector(std::vector<int> &input)
 	// 3 - Recursiverly sort n/2 larger elements from each pair, creating S (sorted sequence)
 	input = fordJohnsonSortVector(larger); // input == sorted larger
 
-	// 4 - Insert the rest using the jacobsthal sequence, avoid to insert the firstInsert
+	// 4 - Insert the rest using the jacobsthal sequence
 	std::vector<size_t> insertionOrder = generateJacobsthalSequence<std::vector<size_t> >(smaller.size());
 	for (size_t i = 0; i < insertionOrder.size(); i++)
-	{
+	{	
 		size_t insert_idx = insertionOrder[i];
 		binaryInsert<std::vector<int> >(input, smaller[insert_idx], this->_vectorBenchmark);
 	}
@@ -165,6 +166,8 @@ std::deque<int> &PmergeMe::fordJohnsonSortDeque(std::deque<int> &input)
 	if (size < 2)
 		return input;
 
+	// 1 - Group the elements from `input` into n/2 pairs of elements
+	// 2 - Perform n/2 comparisons (one per pair), to determine the larger-smaller in each pair
 	for (std::deque<int>::iterator i = input.begin(); i != input.end();)
 	{
 		std::deque<int>::iterator next = i;
@@ -192,11 +195,18 @@ std::deque<int> &PmergeMe::fordJohnsonSortDeque(std::deque<int> &input)
 	if (isOdd)
 		leftover = input[size - 1];
 
+	// 3 - Recursiverly sort n/2 larger elements from each pair, creating S (sorted sequence)
 	input = fordJohnsonSortDeque(larger);
 
-	for (std::deque<int>::iterator i = smaller.begin(); i < smaller.end(); i++)
-		binaryInsert<std::deque<int> >(input, *i, this->_dequeBenchmark);
+	// 4 - Insert the rest using the jacobsthal sequence
+	std::deque<size_t> insertionOrder = generateJacobsthalSequence<std::deque<size_t> >(smaller.size());
+	for (size_t i = 0; i < insertionOrder.size(); i++)
+	{
+		size_t insert_idx = insertionOrder[i];
+		binaryInsert<std::deque<int> >(input, smaller[insert_idx], this->_dequeBenchmark);
+	}
 
+	// 5 - Insert the remaining one
 	if (isOdd)
 		binaryInsert<std::deque<int> >(input, leftover, this->_dequeBenchmark);
 

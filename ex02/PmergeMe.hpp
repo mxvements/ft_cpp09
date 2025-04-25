@@ -6,7 +6,7 @@
 /*   By: luciama2 <luciama2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:32:23 by lucia             #+#    #+#             */
-/*   Updated: 2025/04/23 20:59:51 by luciama2         ###   ########.fr       */
+/*   Updated: 2025/04/25 21:43:51 by luciama2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ class PmergeMe
 			if (n == 0)
 				return sequence;
 			
-			sequence.push_back(1);
+			sequence.push_back(0);
 			
 			size_t j_prev = 0;
 			size_t j_curr = 1;
@@ -79,7 +79,7 @@ class PmergeMe
 				j_curr = j_next;
 			}
 			// add the rest of indices
-			for (size_t i = 1; i < n; i++){
+			for (size_t i = 1; i < n; ++i){
 				if (std::find(sequence.begin(), sequence.end(), i) == sequence.end()){
 					sequence.push_back(i);
 				}
